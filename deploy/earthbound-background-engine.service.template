@@ -1,0 +1,15 @@
+[Unit]
+Description=EarthBound Background Engine
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=@REPO_DIR@
+Environment=EARTHBOUND_BIND_HOST=127.0.0.1
+Environment=EARTHBOUND_PORT=8787
+ExecStart=@NODE_PATH@ @REPO_DIR@/src/server.mjs
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=default.target

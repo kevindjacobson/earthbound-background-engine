@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=EarthBound Background Engine
+Comment=Start the fullscreen HDMI background player
+Exec=@KIOSK_SCRIPT@
+Terminal=false
+X-GNOME-Autostart-enabled=true

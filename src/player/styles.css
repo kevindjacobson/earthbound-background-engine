@@ -1,0 +1,154 @@
+:root {
+  color-scheme: dark;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  background: #000;
+  color: #f4f0dc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+main {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+#scene {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+#controls {
+  position: fixed;
+  z-index: 2;
+  top: max(1rem, env(safe-area-inset-top));
+  right: max(1rem, env(safe-area-inset-right));
+  width: min(25rem, calc(100vw - 2rem));
+  padding: 1rem;
+  border: 2px solid #f4f0dc;
+  border-radius: 2px;
+  background: rgb(8 8 12 / 96%);
+  box-shadow: 6px 6px 0 rgb(0 0 0 / 65%);
+  transition: opacity 100ms linear;
+}
+
+#controls.hidden {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.display-only #controls {
+  display: none;
+}
+
+.actions,
+label span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+h1,
+.eyebrow,
+#status {
+  margin: 0;
+}
+
+h1 {
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+}
+
+.eyebrow {
+  color: #7dd6c4;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  color: #d9d2df;
+  font-size: 0.76rem;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+input,
+button {
+  min-height: 2.65rem;
+  border: 1px solid #77736a;
+  border-radius: 2px;
+  color: inherit;
+  font: inherit;
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  background: #17171d;
+}
+
+input[type="range"] {
+  width: 100%;
+  min-height: 1.4rem;
+  accent-color: #7dd6c4;
+}
+
+button {
+  padding: 0.5rem 0.9rem;
+  background: #23232b;
+  cursor: pointer;
+}
+
+button:hover,
+button:focus-visible {
+  border-color: #f4f0dc;
+  background: #343440;
+}
+
+.actions button {
+  flex: 1;
+}
+
+#status {
+  margin-top: 0.85rem;
+  color: #aaa1b2;
+  font-size: 0.72rem;
+}
+
+#status.error {
+  color: #ff9d9d;
+}
+
+@media (max-width: 600px) {
+  #controls {
+    right: 0.75rem;
+    bottom: max(0.75rem, env(safe-area-inset-bottom));
+    top: auto;
+    width: calc(100vw - 1.5rem);
+  }
+}
