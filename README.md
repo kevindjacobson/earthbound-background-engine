@@ -9,8 +9,8 @@ This renderer started in
 [ghostty-earthbound-shader](https://github.com/kevindjacobson/ghostty-earthbound-shader).
 It lives here so the same frame code can be used without a terminal emulator.
 
-The server has no runtime dependencies. A display and a second browser can stay
-in sync over the local control API.
+The server has no runtime dependencies. A display and a second browser can opt
+into the same synchronized room with a shared URL code.
 
 ![Fullscreen player with controls](docs/player.png)
 
@@ -22,14 +22,29 @@ Node 20 or newer is required.
 npm start
 ```
 
-Open <http://127.0.0.1:8787/> for the player and controls. Add `?display=1` to
-hide the controls on a dedicated display.
+Open <http://127.0.0.1:8787/> for the player. Each ordinary page load starts
+with a random pair of distinct layers and keeps state in that browser tab. Add
+the same non-empty `?code=...` value to two URLs to synchronize them through
+the server.
 
 Keyboard controls:
 
-- `C`: show or hide controls
+- `↑ ↑ ↓ ↓ ← → ← → B A`: reveal the controls
+- `C`: collapse or expand revealed controls
 - `R`: randomize the pair
 - `Space`: play or pause
+
+Use **Tap tempo** two or more times to match the animation speed to a beat.
+At the native 30 fps cadence, 120 BPM maps to 100% speed, or 15 frames per
+beat. A pause longer than two seconds starts a new tempo reading.
+
+The player uses WebGL 2 to decode the native SNES tile, arrangement, and
+palette textures. Choose **Enable mic** to let nearby music drive integer
+scanline displacement, palette-index cycling, and restrained RGB separation.
+The logical image remains 256×224 at 30 fps, texture colors stay within each
+layer's original BGR555 palette, and scaling remains nearest-neighbor. If WebGL
+2 is unavailable, the exact CPU renderer remains available without audio
+reactivity.
 
 The server listens on localhost by default. To control it from a phone or
 another computer on your LAN, listen on all interfaces:
@@ -40,6 +55,20 @@ EARTHBOUND_BIND_HOST=0.0.0.0 npm start
 
 There is no authentication. Keep it on a trusted LAN; do not forward port 8787
 from your router.
+
+## Online player
+
+The public player is available at <https://justalilguy.com/> and
+<https://www.justalilguy.com/>. The legacy <https://earf.justalilguy.com/>
+address remains available. Its default mode is local to the browser: it does
+not open the state API, connect to the event stream, or resolve a Durable
+Object. All player responses carry a `noindex` policy and the HTML repeats it
+as a robots directive.
+
+To create a synchronized, durable room, add a non-empty code to the URL, such
+as `https://earf.justalilguy.com/?code=my-private-room`. Anyone who knows that
+URL can join and control the room, so use a long, unguessable code when the
+state should be private.
 
 ## Raspberry Pi
 
@@ -69,6 +98,10 @@ journalctl --user-unit earthbound-background-engine.service
 The Pi setup has not been tested on physical hardware yet.
 
 ## API
+
+On Cloudflare, all state API routes require the same non-empty `code` query
+parameter used by the player URL. `GET /healthz` remains code-free and does not
+resolve a Durable Object.
 
 - `GET /healthz`
 - `GET /api/state`

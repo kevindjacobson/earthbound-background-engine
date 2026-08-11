@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Silkscreen";
+  src: url("/fonts/silkscreen-bold.ttf") format("truetype");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 700;
+}
+
 :root {
   color-scheme: dark;
   font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -29,6 +37,31 @@ main {
   image-rendering: crisp-edges;
 }
 
+#brand-title {
+  position: fixed;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: max-content;
+  max-width: calc(100vw - 2rem);
+  margin: 0;
+  color: #fff;
+  font-family: "Silkscreen", ui-monospace, monospace;
+  font-size: clamp(1.5rem, 7vw, 5rem);
+  font-weight: 700;
+  letter-spacing: clamp(0.08em, 0.4vw, 0.2em);
+  line-height: 1;
+  text-align: center;
+  text-shadow:
+    3px 0 #000,
+    -3px 0 #000,
+    0 3px #000,
+    0 -3px #000,
+    3px 3px #000;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
 #controls {
   position: fixed;
   z-index: 2;
@@ -43,11 +76,31 @@ main {
   transition: opacity 100ms linear;
 }
 
-#controls.hidden {
-  pointer-events: none;
-  opacity: 0;
+#controls.collapsed {
+  width: auto;
+  padding: 0.5rem;
 }
 
+#controls.collapsed > :not(header),
+#controls.collapsed header > :not(#controls-toggle) {
+  display: none;
+}
+
+#controls header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+#controls-toggle {
+  min-height: 2rem;
+  flex: 0 0 auto;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.68rem;
+}
+
+.controls-concealed #controls,
 .display-only #controls {
   display: none;
 }
@@ -60,13 +113,13 @@ label span {
   gap: 0.75rem;
 }
 
-h1,
+#controls h2,
 .eyebrow,
 #status {
   margin: 0;
 }
 
-h1 {
+#controls h2 {
   margin-top: 0.25rem;
   font-size: 1rem;
   letter-spacing: 0.01em;
@@ -131,13 +184,39 @@ button:focus-visible {
 }
 
 .actions button {
-  flex: 1;
+  flex: 1 1 40%;
+}
+
+.actions {
+  flex-wrap: wrap;
 }
 
 #status {
   margin-top: 0.85rem;
   color: #aaa1b2;
   font-size: 0.72rem;
+}
+
+#audio-status {
+  margin: 0.3rem 0 0;
+  color: #7dd6c4;
+  font-size: 0.68rem;
+}
+
+#audio-meter {
+  width: 100%;
+  height: 0.3rem;
+  margin-top: 0.4rem;
+  overflow: hidden;
+  background: #24242b;
+}
+
+#audio-meter-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: #7dd6c4;
+  transition: width 70ms linear;
 }
 
 #status.error {

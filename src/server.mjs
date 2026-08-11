@@ -13,6 +13,12 @@ const STATIC_FILES = new Map([
   ["/core/engine.mjs", ["src/core/engine.mjs", "text/javascript; charset=utf-8"]],
   ["/core/exact-renderer.mjs", ["src/core/exact-renderer.mjs", "text/javascript; charset=utf-8"]],
   ["/core/timing.mjs", ["src/core/timing.mjs", "text/javascript; charset=utf-8"]],
+  ["/core/state.mjs", ["src/core/state.mjs", "text/javascript; charset=utf-8"]],
+  ["/core/audio-reactivity.mjs", ["src/core/audio-reactivity.mjs", "text/javascript; charset=utf-8"]],
+  ["/audio-input.mjs", ["src/player/audio-input.mjs", "text/javascript; charset=utf-8"]],
+  ["/gpu-renderer.mjs", ["src/player/gpu-renderer.mjs", "text/javascript; charset=utf-8"]],
+  ["/controls-panel.mjs", ["src/player/controls-panel.mjs", "text/javascript; charset=utf-8"]],
+  ["/fonts/silkscreen-bold.ttf", ["src/player/fonts/silkscreen-bold.ttf", "font/ttf"]],
   ["/data/layers.json", ["data/layers.json", "application/json; charset=utf-8"]],
   ["/data/native-data.json", ["data/native-data.json", "application/json; charset=utf-8"]],
 ]);
@@ -101,6 +107,7 @@ export function createPlayerServer() {
         "cache-control": path.startsWith("data/") ? "public, max-age=3600" : "no-cache",
         "content-security-policy": "default-src 'self'; connect-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'",
         "x-content-type-options": "nosniff",
+        "x-robots-tag": "noindex, nofollow, noarchive",
       });
       response.end(body);
     } catch (error) {

@@ -70,7 +70,36 @@ test("GET / serves the player", async () => {
     const response = await fetch(origin);
     assert.equal(response.status, 200);
     assert.match(response.headers.get("content-type"), /^text\/html/);
-    assert.match(await response.text(), /EarthBound Background Engine/);
+    assert.equal(response.headers.get("x-robots-tag"), "noindex, nofollow, noarchive");
+    const html = await response.text();
+    assert.match(html, /<meta name="robots" content="noindex, nofollow, noarchive">/);
+    assert.match(html, /<body class="controls-concealed">/);
+    assert.match(html, /<h1 id="brand-title">JUST A LIL GUY<\/h1>/);
+  });
+});
+
+test("GET serves the audio-reactive browser modules", async () => {
+  await withServer(async (origin) => {
+    for (const path of [
+      "/core/audio-reactivity.mjs",
+      "/audio-input.mjs",
+      "/gpu-renderer.mjs",
+    ]) {
+      const response = await fetch(`${origin}${path}`);
+      assert.equal(response.status, 200, path);
+      assert.match(response.headers.get("content-type"), /^text\/javascript/, path);
+      assert.ok((await response.text()).length > 0, path);
+    }
+  });
+});
+
+test("GET serves the bundled pixel title font", async () => {
+  await withServer(async (origin) => {
+    const response = await fetch(`${origin}/fonts/silkscreen-bold.ttf`);
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get("content-type"), "font/ttf");
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    assert.deepEqual([...bytes.slice(0, 4)], [0, 1, 0, 0]);
   });
 });
 

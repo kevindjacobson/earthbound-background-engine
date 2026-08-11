@@ -48,6 +48,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+## Silkscreen Bold
+
+- Project: <https://github.com/googlefonts/silkscreen>
+- Google Fonts source: <https://github.com/google/fonts/tree/7e8d490955e9d2629cd3095e8dadd6fafe3c16b8/ofl/silkscreen>
+- Copyright: Copyright 2001 The Silkscreen Project Authors
+- License: SIL Open Font License 1.1
+- Bundled file SHA-256:
+  `768476aa712d4f5c3e18d3bce80f980a8bd3f72b7094d22ec5e768df3acfed61`
+
+The complete license text is included at `src/player/fonts/OFL.txt`.
+
 EarthBound and related names are property of their respective owners. This is
 an independent fan project and is not endorsed by Nintendo, APE, HAL
 Laboratory, Shigesato Itoi, or the upstream project authors.

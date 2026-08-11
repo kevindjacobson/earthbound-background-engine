@@ -3,16 +3,21 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>EarthBound Background Engine</title>
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <title>JUST A LIL GUY</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
-  <body>
+  <body class="controls-concealed">
     <main>
       <canvas id="scene" width="256" height="224" aria-label="Animated EarthBound battle background"></canvas>
+      <h1 id="brand-title">JUST A LIL GUY</h1>
       <section id="controls" aria-label="Background controls">
         <header>
-          <p class="eyebrow">256 × 224 / 30 fps</p>
-          <h1>EarthBound Background Engine</h1>
+          <div>
+            <p class="eyebrow">256 × 224 / 30 fps</p>
+            <h2>EarthBound Background Engine</h2>
+          </div>
+          <button id="controls-toggle" type="button" aria-controls="control-form" aria-expanded="true">Hide controls</button>
         </header>
         <form id="control-form">
           <label>
@@ -31,12 +36,20 @@
             <span>Speed <output id="speed-value"></output></span>
             <input id="speed" name="speed" type="range" min="0" max="400">
           </label>
+          <label class="wide">
+            <span>Music reactivity <output id="reactivity-value">70%</output></span>
+            <input id="reactivity" type="range" min="0" max="100" value="70">
+          </label>
           <div class="actions wide">
             <button id="play-toggle" type="button">Pause</button>
             <button id="randomize" type="button">Randomize</button>
+            <button id="tap-tempo" type="button" aria-label="Tap tempo">Tap tempo</button>
+            <button id="audio-toggle" type="button">Enable mic</button>
           </div>
         </form>
         <p id="status" role="status">Loading backgrounds…</p>
+        <p id="audio-status">Audio reactivity off</p>
+        <div id="audio-meter" aria-hidden="true"><span id="audio-meter-fill"></span></div>
       </section>
     </main>
     <script type="module" src="/app.mjs"></script>

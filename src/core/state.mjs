@@ -35,3 +35,79 @@ export function updatePlayerState(current, update) {
   if (typeof next.playing !== "boolean") throw new TypeError("playing must be a boolean");
   return next;
 }
+
+export function playerRoomCode(search) {
+  const code = new URLSearchParams(search).get("code")?.trim();
+  return code || null;
+}
+
+function playerApiUrl(path, code) {
+  return `${path}?code=${encodeURIComponent(code)}`;
+}
+
+async function readStateResponse(response, message) {
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error ?? `${message} (${response.status})`);
+  return result;
+}
+
+export function createPlayerSession({
+  search = globalThis.location?.search ?? "",
+  request = globalThis.fetch,
+  createEventSource = (url) => new EventSource(url),
+  randomLayer = () => Math.floor(Math.random() * 327),
+} = {}) {
+  const code = playerRoomCode(search);
+  let localState = createPlayerState();
+
+  if (!code) {
+    return {
+      code: null,
+      synchronized: false,
+      async load() {
+        return localState;
+      },
+      async update(update) {
+        localState = updatePlayerState(localState, update);
+        return localState;
+      },
+      async randomize() {
+        const layer1 = randomLayer();
+        let layer2 = randomLayer();
+        while (layer2 === layer1) layer2 = randomLayer();
+        localState = updatePlayerState(localState, { layer1, layer2 });
+        return localState;
+      },
+      subscribe() {},
+    };
+  }
+
+  return {
+    code,
+    synchronized: true,
+    async load() {
+      return readStateResponse(await request(playerApiUrl("/api/state", code)), "state load failed");
+    },
+    async update(update) {
+      const response = await request(playerApiUrl("/api/state", code), {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(update),
+      });
+      return readStateResponse(response, "state update failed");
+    },
+    async randomize() {
+      const response = await request(playerApiUrl("/api/randomize", code), {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+      });
+      return readStateResponse(response, "randomize failed");
+    },
+    subscribe(onState, onError) {
+      const events = createEventSource(playerApiUrl("/api/events", code));
+      events.addEventListener("state", (event) => onState(JSON.parse(event.data)));
+      if (onError) events.addEventListener("error", onError);
+      return events;
+    },
+  };
+}
